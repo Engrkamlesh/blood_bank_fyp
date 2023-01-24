@@ -14,8 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:textfield_search/textfield_search.dart';
-import '../components/RoundButton.dart';
-import 'homescreen_view.dart';
+import 'home_page.dart';
 
 class Donate_Form extends StatefulWidget {
   const Donate_Form({Key? key}) : super(key: key);
@@ -35,73 +34,16 @@ class _Donate_FormState extends State<Donate_Form> {
   final _formkey = GlobalKey<FormState>();
   bool loading = false;
 
+
   //Cities list
   List<String> _cities = [
-    "Badin",
-    "Bhirkan",
-    "Rajo Khanani",
-    "Chak",
-    "Dadu",
-    "Digri",
-    "Diplo",
-    "Dokri",
-    "Ghotki",
-    "Haala",
-    "Hyderabad",
-    "Islamkot",
-    "Jacobabad",
-    "Jamshoro",
-    "Jungshahi",
-    "Kandhkot",
-    "Kandiaro",
-    "Karachi",
-    "Kashmore",
-    "Keti Bandar",
-    "Khairpur",
-    "Kotri",
-    "Larkana",
-    "Matiari",
-    "Mehar",
-    "Mirpur Khas",
-    "Mithani",
-    "Mithi",
-    "Mehrabpur",
-    "Moro",
-    "Nagarparkar",
-    "Naudero",
-    "Naushahro Feroze",
-    "Naushara",
-    "Nawabshah",
-    "Nazimabad",
-    "Qambar",
-    "Qasimabad",
-    "Ranipur",
-    "Ratodero",
-    "Rohri",
-    "Sakrand",
-    "Sanghar",
-    "Shahbandar",
-    "Shahdadkot",
-    "Shahdadpur",
-    "Shahpur Chakar",
-    "Shikarpaur",
-    "Sukkur",
-    "Tangwani",
-    "Tando Adam Khan",
-    "Tando Allahyar",
-    "Tando Muhammad Khan",
-    "Thatta",
-    "Umerkot",
-    "Warah"
+    "Badin", "Bhirkan", "Rajo Khanani", "Chak", "Dadu","Digri", "Diplo", "Dokri", "Ghotki", "Haala", "Hyderabad",
+    "Islamkot", "Jacobabad", "Jamshoro", "Jungshahi", "Kandhkot", "Kandiaro", "Karachi", "Kashmore", "Keti Bandar",
+    "Khairpur", "Kotri", "Larkana", "Matiari", "Mehar", "Mirpur Khas", "Mithani", "Mithi", "Mehrabpur", "Moro",
+    "Nagarparkar","Naudero", "Naushahro Feroze", "Naushara", "Nawabshah", "Nazimabad", "Qambar", "Qasimabad", "Ranipur",
+    "Ratodero", "Rohri", "Sakrand", "Sanghar", "Shahbandar", "Shahdadkot", "Shahdadpur", "Shahpur Chakar", "Shikarpaur",
+    "Sukkur", "Tangwani", "Tando Adam Khan", "Tando Allahyar", "Tando Muhammad Khan", "Thatta", "Umerkot", "Warah"
   ];
-
-  // LocationData? currentlocation;
-  // void getcurrentlocation ()async{
-  //   Location location = Location();
-  //   location.getLocation().then((location){
-  //     currentlocation = location;
-  //   });
-  //We will get User Current Location through this function
   Future<Position> _getLocation() async {
     await Geolocator.requestPermission()
         .then((value) {})
@@ -110,6 +52,15 @@ class _Donate_FormState extends State<Donate_Form> {
       print("Error" + error.toString());
     });
     return Geolocator.getCurrentPosition();
+  }
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    namecontroller.dispose();
+    numbercontroller.dispose();
+    citycontroller.dispose();
+    bloodcontroller.dispose();
   }
 
   @override
@@ -133,14 +84,6 @@ class _Donate_FormState extends State<Donate_Form> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                        Container(
-                      width: double.infinity,
-                      height: _height * 0.3,
-                      child: Image.asset(
-                        'images/3.jpg',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
                   SizedBox(height: _height * 0.04,),
                   Text("Donate Blood" , style: GoogleFonts.openSans(textStyle:TextStyle(color: Colors.red,fontWeight: FontWeight.w600, fontSize: 40) ) ,),
                   Text("Please! fill form for donate blood", style: GoogleFonts.openSans(textStyle:TextStyle(fontWeight: FontWeight.w300,color: AppColor.btxtColor))),
@@ -175,25 +118,15 @@ class _Donate_FormState extends State<Donate_Form> {
                       hintText: '@City Mirpurkhas',
                     ),
                   ),
-                  // TextFormField(
-                  //   style: GoogleFonts.openSans(),
-                  //   validator: RequiredValidator(errorText: 'Required'),
-                  //   keyboardType: TextInputType.streetAddress,
-                  //   controller: citycontroller,
-                  //   decoration: const InputDecoration(
-                  //     hintText: "Enter City",
-                  //   ),
-                  // ),
                   SizedBox(height: _height * 0.04),
                   Container(
                       alignment: Alignment.centerLeft,
-                      padding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      padding:EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       width: double.infinity,
                       height: 45,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black38)),
+                          // borderRadius: BorderRadius.circular(8),
+                          border: Border(bottom: BorderSide(width: 1.0,color: Colors.black38))),
                       child: InkWell(
                         onTap: () async {
                           _getLocation().then((value) {
@@ -202,23 +135,17 @@ class _Donate_FormState extends State<Donate_Form> {
                               lititudecon = value.latitude.toDouble();
                               longitudecon = value.longitude.toDouble();
                             });
-                            print('Current Location');
-                            print("Latitude " +
-                                value.latitude.toString() +
-                                " *** Longitude " +
-                                value.longitude.toString());
-                            Utils().ToastMassage('Success Store');
+                            Utils().ToastMassage('Successfully Store');
                           },
                           ).onError((error, stackTrace) {
                             setState(() {
                               location = false;
                             });
                             Utils().ToastMassage("Error Location"+error.toString());
-                            print(error.toString());
                           },
                           );
                         },
-                        child:location?Text('Done',style: TextStyle(fontSize: 16, color: Colors.black54)) : Text(
+                        child:location?Text('Location are Store',style: TextStyle(fontSize: 16, color: Colors.black54)) : Text(
                           'Set Location',
                           style: TextStyle(fontSize: 16, color: Colors.black54),
                         ),
@@ -247,7 +174,7 @@ class _Donate_FormState extends State<Donate_Form> {
                     if (_formkey.currentState!.validate()) {
                       donate();
                     }else{
-                      QuickAlert.show(context: context, type: QuickAlertType.error);
+                      Utils().ToastMassage('Something wrong');
                     }
                   }),
                 ],

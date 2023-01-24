@@ -8,17 +8,15 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../components/bottom_nav.dart';
 import '../components/button_view.dart';
 import '../components/drawer.dart';
-import '../components/request_card.dart';
 import '../routes/routes_name.dart';
 
-class Home_Screen_View extends StatefulWidget {
-  const Home_Screen_View({Key? key}) : super(key: key);
-
+class Home_Page extends StatefulWidget {
+  const Home_Page({Key? key}) : super(key: key);
   @override
-  State<Home_Screen_View> createState() => _Home_Screen_ViewState();
+  State<Home_Page> createState() => _Home_PageState();
 }
 
-class _Home_Screen_ViewState extends State<Home_Screen_View> {
+class _Home_PageState extends State<Home_Page> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int activeindex = 0;
@@ -52,19 +50,9 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           key: _scaffoldKey,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  // Navigator.pushNamed(context, RoutesName.donate);
-                },
-                icon: const Icon(
-                  Icons.search_rounded,
-                  color: Colors.redAccent,
-                ))
-          ],
         ),
         backgroundColor: AppColor.bgColor,
-        body: SafeArea(
+        body:SafeArea(
             child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Padding(
@@ -109,7 +97,7 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
                                 title: 'Add Request',
                                 onpress: () {
                                   Navigator.pushNamed(
-                                      context, RoutesName.addrequest);
+                                      context, RoutesName.addrequest_form);
                                 },
                                 topl: 10,
                                 topr: 30,
@@ -119,10 +107,10 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
                               SizedBox(width: mwidth * 0.06),
                               Button_view(
                                 img: 'images/icon/donate.png',
-                                title: 'Donate',
+                                title: 'Donate form',
                                 onpress: () {
                                   Navigator.pushNamed(
-                                      context, RoutesName.donate);
+                                      context, RoutesName.donate_form);
                                 },
                                 topl: 30,
                                 topr: 10,
@@ -137,10 +125,10 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
                             children: [
                               Button_view(
                                 img: 'images/icon/donator.png',
-                                title: 'Request',
+                                title: 'Request List',
                                 onpress: () {
                                   Navigator.pushNamed(
-                                      context, RoutesName.request);
+                                      context, RoutesName.request_list);
                                 },
                                 topl: 30,
                                 topr: 10,
@@ -150,10 +138,10 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
                               SizedBox(width: mwidth * 0.06),
                               Button_view(
                                 img: 'images/icon/donor.png',
-                                title: 'Donor',
+                                title: 'Donor List',
                                 onpress: () {
                                   Navigator.pushNamed(
-                                      context, RoutesName.donor);
+                                      context, RoutesName.donor_list);
                                 },
                                 topl: 10,
                                 topr: 30,
@@ -165,24 +153,16 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
                         ],
                       ),
                       SizedBox(height: mheight * 0.01),
-                      Text(
-                        'Emergency need',
-                        style: GoogleFonts.openSans(
-                          textStyle:
-                            TextStyle(fontSize: 16,fontWeight: FontWeight.w600, color: AppColor.btxtColor),
-                      )),
-                      SizedBox(height: mheight * 0.01),
-                      Column(children: [Request_Card(), Request_Card()])
                     ],
                   ),
                 ))),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, RoutesName.donate);
+            Navigator.pushNamed(context, RoutesName.donate_form);
           },
           backgroundColor: Colors.redAccent,
           child: Image(
-            image: AssetImage('images/dicon/blood-drop.png'),
+            image: AssetImage('images/icon/blood-drop.png'),
             color: AppColor.whiteColor,
             height: 25,
             width: 25,
@@ -193,6 +173,7 @@ class _Home_Screen_ViewState extends State<Home_Screen_View> {
           child: BottomNav_View(),
         ));
   }
+
   Widget buildImage(String imageUrls, int index  ){
     return Container(
       padding: EdgeInsets.all(10),

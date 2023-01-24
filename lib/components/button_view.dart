@@ -25,7 +25,9 @@ class Button_view extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
+    return  InkWell(
+        onTap:onpress,
+        child:  Container(
       height: 120,
       width: 120,
       decoration: BoxDecoration(
@@ -40,18 +42,14 @@ class Button_view extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(10),
-            child: InkWell(
-              onTap:onpress,
-              child:   Image.asset(img,
+            child:  Image.asset(img,
               fit: BoxFit.cover,
               height: 50,
               width: 50,
-            ),)
-
-          ),
+            ),),
           Text(title,style: GoogleFonts.openSans(textStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w400,color: AppColor.lgreyColor),))
         ],
       ),
-    );
+    ));
   }
 }

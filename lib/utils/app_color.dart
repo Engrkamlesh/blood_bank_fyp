@@ -19,7 +19,4 @@ class AppColor{
   static const Color draColor = Color(0xffff5d5d);
   static const Color cardColor = Color(0xffffffff);
 
-
-
-
 }

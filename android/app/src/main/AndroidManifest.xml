@@ -2,18 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.blood_bank_fyp">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAsjOturbui_Q4BUFZk2UY0dMtiCjZnz0k"/>
 
     <application
         android:label="blood_bank_fyp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDw9decax7nCHHPqCP4Xgzre6yvu9Tm_nU"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -42,4 +44,12 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <!-- Provide required visibility configuration for API level 30 and above -->
+    <queries>
+        <!-- If your app checks for call support -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="tel" />
+        </intent>
+    </queries>
 </manifest>

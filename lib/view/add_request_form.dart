@@ -43,62 +43,12 @@ class _Add_Blood_RequestState extends State<Add_Blood_Request> {
   }
 
   List<String> _cities = [
-    "Badin",
-    "Bhirkan",
-    "Rajo Khanani",
-    "Chak",
-    "Dadu",
-    "Digri",
-    "Diplo",
-    "Dokri",
-    "Ghotki",
-    "Haala",
-    "Hyderabad",
-    "Islamkot",
-    "Jacobabad",
-    "Jamshoro",
-    "Jungshahi",
-    "Kandhkot",
-    "Kandiaro",
-    "Karachi",
-    "Kashmore",
-    "Keti Bandar",
-    "Khairpur",
-    "Kotri",
-    "Larkana",
-    "Matiari",
-    "Mehar",
-    "Mirpur Khas",
-    "Mithani",
-    "Mithi",
-    "Mehrabpur",
-    "Moro",
-    "Nagarparkar",
-    "Naudero",
-    "Naushahro Feroze",
-    "Naushara",
-    "Nawabshah",
-    "Nazimabad",
-    "Qambar",
-    "Qasimabad",
-    "Ranipur",
-    "Ratodero",
-    "Rohri",
-    "Sakrand",
-    "Sanghar",
-    "Shahbandar",
-    "Shahdadkot",
-    "Shahdadpur",
-    "Shahpur Chakar",
-    "Shikarpaur",
-    "Sukkur",
-    "Tangwani",
-    "Tando Adam Khan",
-    "Tando Allahyar",
-    "Tando Muhammad Khan",
-    "Thatta",
-    "Umerkot",
-    "Warah"
+    "Badin", "Bhirkan", "Rajo Khanani", "Chak", "Dadu","Digri", "Diplo", "Dokri", "Ghotki", "Haala", "Hyderabad",
+    "Islamkot", "Jacobabad", "Jamshoro", "Jungshahi", "Kandhkot", "Kandiaro", "Karachi", "Kashmore", "Keti Bandar",
+    "Khairpur", "Kotri", "Larkana", "Matiari", "Mehar", "Mirpur Khas", "Mithani", "Mithi", "Mehrabpur", "Moro",
+    "Nagarparkar","Naudero", "Naushahro Feroze", "Naushara", "Nawabshah", "Nazimabad", "Qambar", "Qasimabad", "Ranipur",
+    "Ratodero", "Rohri", "Sakrand", "Sanghar", "Shahbandar", "Shahdadkot", "Shahdadpur", "Shahpur Chakar", "Shikarpaur",
+    "Sukkur", "Tangwani", "Tando Adam Khan", "Tando Allahyar", "Tando Muhammad Khan", "Thatta", "Umerkot", "Warah"
   ];
 
   @override
@@ -108,6 +58,15 @@ class _Add_Blood_RequestState extends State<Add_Blood_Request> {
     _cities;
   }
 
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    namecontroller.dispose();
+    numbercontroller.dispose();
+    citycontroller.dispose();
+    bloodcontroller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,18 +89,17 @@ class _Add_Blood_RequestState extends State<Add_Blood_Request> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                         Container(
-                      width: double.infinity,
-                      height: height * 0.3,
-                      child: Image.asset(
-                        'images/3.jpg',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    //      Container(
+                    //   width: double.infinity,
+                    //   height: height * 0.3,
+                    //   child: Image.asset(
+                    //     'images/3.jpg',
+                    //     fit: BoxFit.fill,
+                    //   ),
+                    // ),
                   SizedBox(height: height * 0.06),
                   Text('Blood Request', style: GoogleFonts.openSans(textStyle: const TextStyle(fontSize: 30,color: AppColor.redColor,fontWeight: FontWeight.w600)),),
                   Text("fill form for blood Request", style: GoogleFonts.openSans(textStyle:TextStyle(fontWeight: FontWeight.w300,color: AppColor.btxtColor))),
-
                   SizedBox(height: height * 0.05,),
                         CustomText('Enter Name', 'Name',namecontroller,TextInputType.name),
                   SizedBox(height:  height * 0.03,),
@@ -164,8 +122,7 @@ class _Add_Blood_RequestState extends State<Add_Blood_Request> {
                       width: double.infinity,
                       height: 45,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black38)),
+                          border: Border(bottom: BorderSide(width: 1.0,color: Colors.black38))),
                       child: InkWell(
                         onTap: () async {
                           _getLocation().then((value) {
@@ -174,23 +131,17 @@ class _Add_Blood_RequestState extends State<Add_Blood_Request> {
                               lititudecon = value.latitude.toDouble();
                               longitudecon = value.longitude.toDouble();
                             });
-                            print('Current Location');
-                            print("Latitude " +
-                                value.latitude.toString() +
-                                " *** Longitude " +
-                                value.longitude.toString());
-                            Utils().ToastMassage('Success Store');
+                            Utils().ToastMassage('Successfully Store');
                           },
                           ).onError((error, stackTrace) {
                             setState(() {
                               location = false;
                             });
                             Utils().ToastMassage("Error Location"+error.toString());
-                            print(error.toString());
                           },
                           );
                         },
-                        child:location?Text('Done',style: TextStyle(fontSize: 16, color: Colors.black54)) : Text(
+                        child:location?Text('Location are store',style: TextStyle(fontSize: 16, color: Colors.black54)) : Text(
                           'Set Location',
                           style: TextStyle(fontSize: 16, color: Colors.black54),
                         ),
@@ -219,7 +170,7 @@ class _Add_Blood_RequestState extends State<Add_Blood_Request> {
                       if(_formkey.currentState!.validate()){
                       add_request();
                     }else{
-                      QuickAlert.show(context: context, type: QuickAlertType.error);
+                        Utils().ToastMassage('something wrong');
                     }
                   }),
                 ],
@@ -237,7 +188,6 @@ void add_request() async{
       loading = true;
     });
     final firestore = FirebaseFirestore.instance.collection('Add_request');
-    // User? user = FirebaseAuth.instance.currentUser;
     final id = DateTime.now().millisecondsSinceEpoch.toString();
     firestore.doc(id).set({
       'userid' : id,
@@ -251,7 +201,7 @@ void add_request() async{
       setState(() {
         loading = false;
       });
-      Utils().ToastMassage('Add Request Successfully');
+      Utils().ToastMassage('Request submitted');
       Navigator.pushNamed(context, RoutesName.home);
     }).onError((error, stackTrace) {
       setState(() {

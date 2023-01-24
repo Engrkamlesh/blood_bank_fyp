@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, unused_local_variable, duplicate_ignore, non_constant_identifier_names
 
 import 'package:blood_bank_fyp/components/custombutton.dart';
+import 'package:blood_bank_fyp/components/forgot_password.dart';
 import 'package:blood_bank_fyp/routes/routes_name.dart';
+import 'package:blood_bank_fyp/utils/app_color.dart';
 import 'package:blood_bank_fyp/utils/toastMassage.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -12,16 +14,16 @@ import 'package:quickalert/quickalert.dart';
 import '../utils/ordriver.dart';
 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class Login_Page extends StatefulWidget {
+  const Login_Page({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<Login_Page> createState() => _Login_PageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _Login_PageState extends State<Login_Page> {
   final emailcontroller = TextEditingController();
-  final passwordcontrolle = TextEditingController();
+  final passwordcontroller = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final formkey = GlobalKey<FormState>();
   bool showpassword = true;
@@ -39,13 +41,22 @@ class _LoginScreenState extends State<LoginScreen> {
      _auth.signInWithCredential(credential).then((value){
        if(FirebaseAuth.instance.currentUser != null){
          Utils().ToastMassage('Google Authantication is Successfully');
+         Navigator.pushNamed(context, RoutesName.home);
          // print('Google Authantication is Successfully');
          // print("${FirebaseAuth.instance.currentUser!.displayName} Sign in");
        }
      }).onError((error, stackTrace){
-       print("Error He"+error.toString());
+
        Utils().ToastMassage(error.toString());
      });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailcontroller.dispose();
+    passwordcontroller.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -53,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final _width = MediaQuery.of(context).size.width * 0.8;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AppColor.whiteColor,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: SingleChildScrollView(
@@ -99,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Icon(Icons.lock),
                         RequiredValidator(errorText: 'Required')
                       ,
-                      passwordcontrolle,
+                      passwordcontroller,
                       TextInputType.visiblePassword,
                       true),
                   Row(
@@ -107,7 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Forgot_Password()));
+                          },
                           child: Text("Forget Password",
                               // ignore: prefer_const_constructors
                               style:GoogleFonts.openSans(textStyle: TextStyle(
@@ -121,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if(formkey.currentState!.validate()){
                     login();
                   }else{
-                    QuickAlert.show(context: context, type: QuickAlertType.error);
+                    Utils().ToastMassage('Something Wrong');
                   }
                 }),
                 SizedBox(height:_height * 0.03),
@@ -188,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       loading = true;
     });
-    _auth.signInWithEmailAndPassword(email: emailcontroller.text, password: passwordcontrolle.text).then((value){
+    _auth.signInWithEmailAndPassword(email: emailcontroller.text, password: passwordcontroller.text).then((value){
       Utils().ToastMassage('Welcome To Blood Bank');
       Navigator.pushNamed(context, RoutesName.home);
         setState(() {
@@ -220,9 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 showpassword = !showpassword;
               });
             },
-            icon: Icon(passwordhide?
-            Icons.visibility_off:Icons.visibility,
-            ),
+            icon:showpassword? Icon(Icons.visibility_off):Icon(Icons.visibility),
           )
               : null,
           contentPadding:

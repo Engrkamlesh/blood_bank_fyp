@@ -13,7 +13,6 @@ class Utils{
       backgroundColor: AppColor.iconColor,
       textColor: Colors.white,
       fontSize: 16.0,
-
     );
   }
 

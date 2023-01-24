@@ -1,21 +1,22 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
-import 'package:blood_bank_fyp/components/google.dart';
 import 'package:blood_bank_fyp/utils/toastMassage.dart';
+import 'package:blood_bank_fyp/view/google_map_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../utils/app_color.dart';
 
-class Donor_View extends StatefulWidget {
-  const Donor_View({Key? key}) : super(key: key);
+class Request_List extends StatefulWidget {
+  const Request_List({Key? key}) : super(key: key);
 
   @override
-  State<Donor_View> createState() => _Donor_ViewState();
+  State<Request_List> createState() => _Request_ListState();
 }
 
-class _Donor_ViewState extends State<Donor_View> {
+class _Request_ListState extends State<Request_List> {
   final firestore =
-  FirebaseFirestore.instance.collection('Donation').snapshots();
+      FirebaseFirestore.instance.collection('Add_request').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class _Donor_ViewState extends State<Donor_View> {
       backgroundColor: AppColor.bgColor,
       appBar: AppBar(
         title: Text(
-          'Donation',
+          'Request',
           style: GoogleFonts.openSans(
             textStyle: TextStyle(
                 color: AppColor.btxtColor, fontWeight: FontWeight.w600),
@@ -44,20 +45,24 @@ class _Donor_ViewState extends State<Donor_View> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
+        child: StreamBuilder<QuerySnapshot>(
                 stream: firestore,
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    CircularProgressIndicator();
-                  }
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting)
+                    return Center(child:
+                    CircularProgressIndicator(),);
+                  if (snapshot.hasError)
+                    return Utils().ToastMassage('Here has Some Error');
+
                   return Expanded(
                     child: ListView.builder(
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
+                          return Card(
+                              color: AppColor.bgColor,
+                              elevation: 5,
+                              child:
+                            ListTile(
                             leading: Stack(
                               children: [
                                 Container(
@@ -108,7 +113,7 @@ class _Donor_ViewState extends State<Donor_View> {
                                   size: 15,
                                 ),
                                 // SizedBox(width: 5),
-                                Text(snapshot.data!.docs[index]['City'],
+                                Text(snapshot.data!.docs[index]['address'],
                                     style: GoogleFonts.openSans(
                                       textStyle: const TextStyle(
                                           fontSize: 12,
@@ -124,16 +129,31 @@ class _Donor_ViewState extends State<Donor_View> {
                                     width: 70,
                                     decoration: BoxDecoration(
                                         border:
-                                        Border.all(color: Colors.black26),
+                                            Border.all(color: Colors.black26),
                                         color: Colors.greenAccent,
                                         borderRadius:
-                                        BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     child: Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(3.0),
-                                        child: Row(
+                                        child:InkWell(
+                                            onTap: () async{
+                                              final Uri url = Uri(
+                                                  scheme: 'tel',
+                                                  path: snapshot.data!.docs[index]["number"].toString()
+                                              );
+                                              if(await canLaunchUrl(url)){
+                                                await launchUrl(url);
+                                              }else{
+                                                Utils().ToastMassage('Can not lunch this url');
+                                              }
+                                              // await FlutterPhoneDirectCaller.callNumber(snapshot.data!.docs[index]['mobile'].toString());
+                                              //  await launch('tel:${num}');
+
+                                          },
+                                          child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             const Icon(
                                               Icons.phone,
@@ -147,11 +167,11 @@ class _Donor_ViewState extends State<Donor_View> {
                                                     color: AppColor.whiteColor,
                                                     fontSize: 12,
                                                     fontWeight:
-                                                    FontWeight.w600),
+                                                        FontWeight.w600),
                                               ),
                                             ),
                                           ],
-                                        ),
+                                        ),)
                                       ),
                                     )),
                                 const SizedBox(height: 6),
@@ -160,50 +180,47 @@ class _Donor_ViewState extends State<Donor_View> {
                                     width: 70,
                                     decoration: BoxDecoration(
                                         border:
-                                        Border.all(color: Colors.black26),
+                                            Border.all(color: Colors.black26),
                                         color: Colors.pinkAccent,
                                         borderRadius:
-                                        BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     child: Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(3.0),
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             const Icon(
                                               Icons.location_on_outlined,
                                               color: Colors.white,
                                               size: 15,
                                             ),
-                                            InkWell(
-                                              onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Google_Map()));
-                                              },
-                                              child:
-                                              Text(
-                                                'Map',
-                                                style: GoogleFonts.openSans(
-                                                  textStyle: const TextStyle(
-                                                      color: AppColor.whiteColor,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                      FontWeight.w600),
-                                                ),
+                                        InkWell(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Google_Map_Location(src_latitude:snapshot.data!.docs[index]["Latitude"],src_longitude: snapshot.data!.docs[index]["longitidue"],)));
+                                          },
+                                          child:
+                                            Text(
+                                              'Map',
+                                              style: GoogleFonts.openSans(
+                                                textStyle: const TextStyle(
+                                                    color: AppColor.whiteColor,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w600),
                                               ),
-                                            ),
+                                            ),)
                                           ],
                                         ),
                                       ),
                                     )),
                               ],
                             ),
-                          );
+                          ));
                         }),
                   );
                 })
-          ],
-        ),
       ),
     );
   }

@@ -21,26 +21,26 @@ class BottomNav_View extends StatelessWidget {
                     height: 25,
                     width: 25,
                     color: AppColor.iconColor,
-                    image: AssetImage('images/dicon/home.png'))),
+                    image: AssetImage('images/icon/home.png'))),
             TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, RoutesName.donor);
+                  Navigator.pushNamed(context, RoutesName.donor_list);
                 },
                 child: const Image(
                     height: 25,
                     width: 25,
                     color: AppColor.iconColor,
-                    image: AssetImage('images/dicon/reminder.png'))),
+                    image: AssetImage('images/icon/reminder.png'))),
             SizedBox(width: MediaQuery.of(context).size.width * 0.8 * 0.1),
             TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, RoutesName.request);
+                  Navigator.pushNamed(context, RoutesName.request_list);
                 },
                 child: const Image(
                     height: 25,
                     width: 25,
                     color: AppColor.iconColor,
-                    image: AssetImage('images/dicon/bell.png'))),
+                    image: AssetImage('images/icon/bell.png'))),
             TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, RoutesName.profile);
@@ -49,7 +49,7 @@ class BottomNav_View extends StatelessWidget {
                     height: 25,
                     width: 25,
                     color: AppColor.iconColor,
-                    image: AssetImage('images/dicon/person.png')))
+                    image: AssetImage('images/icon/person.png')))
           ]
     );
   }

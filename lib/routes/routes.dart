@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:blood_bank_fyp/routes/routes_name.dart';
-import 'package:blood_bank_fyp/view/homescreen_view.dart';
-import 'package:blood_bank_fyp/view/add_request_view.dart';
-import 'package:blood_bank_fyp/view/donor_view.dart';
+import 'package:blood_bank_fyp/view/home_page.dart';
+import 'package:blood_bank_fyp/view/add_request_form.dart';
+import 'package:blood_bank_fyp/view/donor_list.dart';
 import 'package:blood_bank_fyp/view/donate_form.dart';
-import 'package:blood_bank_fyp/view/login_screen.dart';
-import 'package:blood_bank_fyp/view/profile_view.dart';
+import 'package:blood_bank_fyp/view/login_page.dart';
+import 'package:blood_bank_fyp/view/profile_page.dart';
 import 'package:blood_bank_fyp/view/register_form.dart';
-import 'package:blood_bank_fyp/view/request_view.dart';
+import 'package:blood_bank_fyp/view/request_list.dart';
 import 'package:blood_bank_fyp/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,20 +17,20 @@ class Routes {
       case RoutesName.splash:
         return MaterialPageRoute(builder: (context) => SplashScreen());
       case RoutesName.login:
-        return MaterialPageRoute(builder: (context) => LoginScreen());
+        return MaterialPageRoute(builder: (context) => Login_Page());
       case RoutesName.register:
         return MaterialPageRoute(builder: (context) => Register_Form());
       case RoutesName.home:
-        return MaterialPageRoute(builder: (context) => Home_Screen_View());
-      case RoutesName.request:
-        return MaterialPageRoute(builder: (context) => Request_View());
-      case RoutesName.addrequest:
+        return MaterialPageRoute(builder: (context) => Home_Page());
+      case RoutesName.request_list:
+        return MaterialPageRoute(builder: (context) => Request_List());
+      case RoutesName.addrequest_form:
         return MaterialPageRoute(builder: (context) => Add_Blood_Request());
       case RoutesName.profile:
-        return MaterialPageRoute(builder: (context) => Profile_View());
-      case RoutesName.donor:
-        return MaterialPageRoute(builder: (context) => Donor_View());
-      case RoutesName.donate:
+        return MaterialPageRoute(builder: (context) => Profile_Page());
+      case RoutesName.donor_list:
+        return MaterialPageRoute(builder: (context) => Donor_List());
+      case RoutesName.donate_form:
         return MaterialPageRoute(builder: (context) => Donate_Form());
       default:
         return MaterialPageRoute(builder: (_) {

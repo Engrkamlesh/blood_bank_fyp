@@ -1,24 +1,22 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
-
-import 'package:blood_bank_fyp/components/google.dart';
+import 'package:blood_bank_fyp/utils/toastMassage.dart';
+import 'package:blood_bank_fyp/view/google_map_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../components/request_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../utils/app_color.dart';
 
-class Request_View extends StatefulWidget {
-  const Request_View({Key? key}) : super(key: key);
+class Donor_List extends StatefulWidget {
+  const Donor_List({Key? key}) : super(key: key);
 
   @override
-  State<Request_View> createState() => _Request_ViewState();
+  State<Donor_List> createState() => _Donor_ListState();
 }
 
-class _Request_ViewState extends State<Request_View> {
+class _Donor_ListState extends State<Donor_List> {
   final firestore =
-      FirebaseFirestore.instance.collection('Add_request').snapshots();
-
+      FirebaseFirestore.instance.collection('Donation').snapshots();
   @override
   Widget build(BuildContext context) {
     // final _height = MediaQuery.of(context).size.height * 0.8;
@@ -27,7 +25,7 @@ class _Request_ViewState extends State<Request_View> {
       backgroundColor: AppColor.bgColor,
       appBar: AppBar(
         title: Text(
-          'Request',
+          'Donation',
           style: GoogleFonts.openSans(
             textStyle: TextStyle(
                 color: AppColor.btxtColor, fontWeight: FontWeight.w600),
@@ -52,14 +50,19 @@ class _Request_ViewState extends State<Request_View> {
                 stream: firestore,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    CircularProgressIndicator();
-                  }
+                  if(snapshot.connectionState == ConnectionState.waiting)
+                    return Center(child:
+                    CircularProgressIndicator(),);
+                  if (snapshot.hasError)
+                    return Utils().ToastMassage('Here has Some Error');
                   return Expanded(
                     child: ListView.builder(
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
+                          return Card(
+                            color: AppColor.bgColor,
+                              elevation: 5,
+                              child:ListTile(
                             leading: Stack(
                               children: [
                                 Container(
@@ -87,7 +90,8 @@ class _Request_ViewState extends State<Request_View> {
                                               color: Colors.white, width: 2)),
                                       child: Center(
                                         child: Text(
-                                          snapshot.data!.docs[index]['bloodgroup'],
+                                          snapshot.data!.docs[index]
+                                              ['bloodgroup'],
                                           style: GoogleFonts.openSans(
                                               textStyle: const TextStyle(
                                                   fontWeight: FontWeight.w700)),
@@ -96,7 +100,8 @@ class _Request_ViewState extends State<Request_View> {
                                     ))
                               ],
                             ),
-                            title: Text(snapshot.data!.docs[index]['name'].toString(),
+                            title: Text(
+                                snapshot.data!.docs[index]['name'].toString(),
                                 style: GoogleFonts.openSans(
                                   textStyle: const TextStyle(
                                       fontSize: 18,
@@ -110,7 +115,7 @@ class _Request_ViewState extends State<Request_View> {
                                   size: 15,
                                 ),
                                 // SizedBox(width: 5),
-                                Text(snapshot.data!.docs[index]['address'],
+                                Text(snapshot.data!.docs[index]['City'],
                                     style: GoogleFonts.openSans(
                                       textStyle: const TextStyle(
                                           fontSize: 12,
@@ -133,7 +138,21 @@ class _Request_ViewState extends State<Request_View> {
                                     child: Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(3.0),
-                                        child: Row(
+                                        child:InkWell(
+                                          onTap: () async{
+                                            final Uri url = Uri(
+                                              scheme: 'tel',
+                                              path: snapshot.data!.docs[index]["number"].toString()
+                                            );
+                                            if(await canLaunchUrl(url)){
+                                              await launchUrl(url);
+                                            }else{
+                                              Utils().ToastMassage('Can not lunch this url');
+                                            }
+                                           // await FlutterPhoneDirectCaller.callNumber(snapshot.data!.docs[index]['mobile'].toString());
+                                           //  await launch('tel:${num}');
+                                          },
+                                          child:Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
@@ -154,7 +173,7 @@ class _Request_ViewState extends State<Request_View> {
                                             ),
                                           ],
                                         ),
-                                      ),
+                                      )),
                                     )),
                                 const SizedBox(height: 6),
                                 Container(
@@ -178,27 +197,33 @@ class _Request_ViewState extends State<Request_View> {
                                               color: Colors.white,
                                               size: 15,
                                             ),
-                                        InkWell(
-                                          onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Google_Map()));
-                                          },
-                                          child:
-                                            Text(
-                                              'Map',
-                                              style: GoogleFonts.openSans(
-                                                textStyle: const TextStyle(
-                                                    color: AppColor.whiteColor,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Google_Map_Location(src_latitude:snapshot.data!.docs[index]["Latitude"],src_longitude: snapshot.data!.docs[index]["longitidue"],)));
+                                              },
+                                              child: Text(
+                                                'Map',
+                                                style: GoogleFonts.openSans(
+                                                  textStyle: const TextStyle(
+                                                      color:
+                                                          AppColor.whiteColor,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
                                               ),
-                                            ),)
+                                            ),
                                           ],
                                         ),
                                       ),
                                     )),
                               ],
                             ),
+                          )
                           );
                         }),
                   );
